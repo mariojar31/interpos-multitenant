@@ -9,6 +9,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.xml.bind.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,19 @@ public class TenantService {
     private final PasswordEncoder passwordEncoder;
     private final TenantDataSourceService tenantDataSourceService;
 
+//    @Value("${spring.datasource.url}")
+//    private String adminDbUrl;
+//
+    @Value("${spring.datasource.username}")
+    private String adminDbUsername;
+
+    @Value("${spring.datasource.password}")
+    private String adminDbPassword;
+//
+//    @Value("${spring.datasource.driver-class-name}")
+//    private String adminDbDriverClassName;
+
+
     public void activateTenant(String tenantId) {
         Tenant tenant = tenantRepository.findById(tenantId)
                 .orElseThrow(() -> new TenantNotFoundException(tenantId));
@@ -44,6 +58,8 @@ public class TenantService {
 
         Tenant savedTenant = tenantRepository.save(tenant);
         tenantDataSourceService.loadDataSource(savedTenant);
+
+        tenantDataSourceService.migrateTenantDatabase(savedTenant);
 
         return TenantDTO.fromEntity(savedTenant);
     }
@@ -70,7 +86,7 @@ public class TenantService {
     }
 
     private String buildDbUrl(TenantRegistrationDto dto) {
-        return String.format("jdbc:mysql://localhost:3306/%s?" +
+        return String.format("jdbc:mysql://localhost:3307/%s?" +
                 "useSSL=false&" +
                 "serverTimezone=UTC&" +
                 "allowPublicKeyRetrieval=true&" +
@@ -81,9 +97,9 @@ public class TenantService {
         try {
             // 1. Conexión administrativa - usando HikariConfig para mejor control
             HikariConfig adminConfig = new HikariConfig();
-            adminConfig.setJdbcUrl("jdbc:mysql://localhost:3306/mysql?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC");
-            adminConfig.setUsername("admin_db");
-            adminConfig.setPassword("Qwerty123*");
+            adminConfig.setJdbcUrl("jdbc:mysql://localhost:3307/mysql?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC");
+            adminConfig.setUsername(adminDbUsername);
+            adminConfig.setPassword(adminDbPassword);
             adminConfig.setDriverClassName("com.mysql.cj.jdbc.Driver");
             adminConfig.setAutoCommit(false); // Crítico
             adminConfig.setMaximumPoolSize(5);
@@ -102,10 +118,17 @@ public class TenantService {
 
                 // 3. Crear usuario con autenticación nativa
                 stmt.executeUpdate(
-                        "CREATE USER IF NOT EXISTS '" + tenantUser + "'@'%' IDENTIFIED WITH caching_sha2_password BY '" + tenantPassword + "'"
+                        "CREATE USER IF NOT EXISTS '" + tenantUser + "'@'%' IDENTIFIED BY '" + tenantPassword + "'"
                 );
                 stmt.executeUpdate(
-                        "CREATE USER IF NOT EXISTS '" + tenantUser + "'@'localhost' IDENTIFIED WITH caching_sha2_password BY '" + tenantPassword + "'"
+                        "ALTER USER '" + tenantUser + "'@'%' IDENTIFIED BY '" + tenantPassword + "'"
+                );
+
+                stmt.executeUpdate(
+                        "CREATE USER IF NOT EXISTS '" + tenantUser + "'@'localhost' IDENTIFIED BY '" + tenantPassword + "'"
+                );
+                stmt.executeUpdate(
+                        "ALTER USER '" + tenantUser + "'@'localhost' IDENTIFIED BY '" + tenantPassword + "'"
                 );
 
                 // 4. Otorgar permisos
@@ -118,7 +141,7 @@ public class TenantService {
 
                 // 5. Verificar conexión con las credenciales recién creadas
                 String tenantJdbcUrl = String.format(
-                        "jdbc:mysql://localhost:3306/%s?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useServerPrepStmts=false",
+                        "jdbc:mysql://localhost:3307/%s?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useServerPrepStmts=false",
                         tenant.getDbName()
                 );
 

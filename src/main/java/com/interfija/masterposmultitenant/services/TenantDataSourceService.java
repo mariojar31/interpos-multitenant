@@ -7,6 +7,7 @@ import com.interfija.masterposmultitenant.tenant.ClientDataSourceRouter;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
+import org.flywaydb.core.Flyway;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,28 @@ public class TenantDataSourceService {
         config.setMaxLifetime(2000000);
 
         return new HikariDataSource(config);
+    }
+
+    public void migrateTenantDatabase(Tenant tenant) {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(tenant.getDbUrl());
+        config.setUsername(tenant.getDbUsername());
+        config.setPassword(tenant.getDbPassword());
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+
+        HikariDataSource tenantDataSource = new HikariDataSource(config);
+
+        try {
+            Flyway flyway = Flyway.configure()
+                    .dataSource(tenantDataSource)
+                    .locations("classpath:db/migration/tenants") // ruta a migraciones para tenants
+                    .baselineOnMigrate(true)
+                    .load();
+
+            flyway.migrate();
+
+        } finally {
+            tenantDataSource.close();
+        }
     }
 }

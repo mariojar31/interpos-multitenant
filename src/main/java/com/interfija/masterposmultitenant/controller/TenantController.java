@@ -1,7 +1,7 @@
 package com.interfija.masterposmultitenant.controller;
 
-import com.interfija.masterposmultitenant.dtos.TenantDTO;
-import com.interfija.masterposmultitenant.dtos.TenantRegistrationDto;
+import com.interfija.masterposmultitenant.dto.TenantDTO;
+import com.interfija.masterposmultitenant.dto.TenantRegistrationDto;
 import com.interfija.masterposmultitenant.services.TenantService;
 import jakarta.validation.Valid;
 import jakarta.xml.bind.ValidationException;

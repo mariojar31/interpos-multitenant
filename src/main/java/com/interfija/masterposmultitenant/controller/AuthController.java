@@ -1,16 +1,15 @@
 package com.interfija.masterposmultitenant.controller;
 
-import com.interfija.masterposmultitenant.dtos.JwtAuthenticationResponse;
-import com.interfija.masterposmultitenant.dtos.LoginRequest;
-import com.interfija.masterposmultitenant.dtos.RegisterRequest;
-import com.interfija.masterposmultitenant.dtos.ApiResponse;
-import com.interfija.masterposmultitenant.model.User;
+import com.interfija.masterposmultitenant.dto.JwtAuthenticationResponse;
+import com.interfija.masterposmultitenant.dto.LoginRequest;
+import com.interfija.masterposmultitenant.dto.RegisterRequest;
+import com.interfija.masterposmultitenant.dto.ApiResponse;
+import com.interfija.masterposmultitenant.entities.User;
 import com.interfija.masterposmultitenant.repository.UserRepository;
 import com.interfija.masterposmultitenant.security.JwtTokenProvider;
 import com.interfija.masterposmultitenant.services.TenantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

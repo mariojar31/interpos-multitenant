@@ -1,18 +1,14 @@
 package com.interfija.masterposmultitenant.services;
 
-import com.interfija.masterposmultitenant.model.Tenant;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import com.interfija.masterposmultitenant.entities.Tenant;
 import com.interfija.masterposmultitenant.tenant.ClientDataSourceRouter;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import org.flywaydb.core.Flyway;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor

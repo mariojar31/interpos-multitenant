@@ -10,6 +10,7 @@ CREATE TABLE tenants (
                          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- Crear tabla users
 CREATE TABLE users (
                        id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,

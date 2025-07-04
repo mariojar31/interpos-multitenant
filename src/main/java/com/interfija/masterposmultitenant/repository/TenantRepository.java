@@ -1,6 +1,6 @@
 package com.interfija.masterposmultitenant.repository;
 
-import com.interfija.masterposmultitenant.model.Tenant;
+import com.interfija.masterposmultitenant.entities.Tenant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,21 +1,19 @@
 package com.interfija.masterposmultitenant.services;
 
-import com.interfija.masterposmultitenant.dtos.TenantDTO;
-import com.interfija.masterposmultitenant.dtos.TenantRegistrationDto;
+import com.interfija.masterposmultitenant.dto.TenantDTO;
+import com.interfija.masterposmultitenant.dto.TenantRegistrationDto;
 import com.interfija.masterposmultitenant.exception.TenantNotFoundException;
-import com.interfija.masterposmultitenant.model.Tenant;
+import com.interfija.masterposmultitenant.entities.Tenant;
 import com.interfija.masterposmultitenant.repository.TenantRepository;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.xml.bind.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;

@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS productos (
-    id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(255) NOT NULL,
-    descripcion TEXT,
-    precio DECIMAL(10,2) NOT NULL,
-    cantidad INT NOT NULL,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );

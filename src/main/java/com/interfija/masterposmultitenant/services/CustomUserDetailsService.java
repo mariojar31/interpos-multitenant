@@ -1,8 +1,8 @@
 package com.interfija.masterposmultitenant.services;
 
-import com.interfija.masterposmultitenant.model.UserPrincipal;
+import com.interfija.masterposmultitenant.entities.UserPrincipal;
 import com.interfija.masterposmultitenant.repository.UserRepository;
-import com.interfija.masterposmultitenant.model.User;
+import com.interfija.masterposmultitenant.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

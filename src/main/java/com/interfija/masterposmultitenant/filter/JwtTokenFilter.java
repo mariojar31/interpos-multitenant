@@ -1,7 +1,7 @@
 package com.interfija.masterposmultitenant.filter;
 
 import com.interfija.masterposmultitenant.context.TenantContext;
-import com.interfija.masterposmultitenant.model.UserPrincipal;
+import com.interfija.masterposmultitenant.entities.UserPrincipal;
 import com.interfija.masterposmultitenant.security.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
